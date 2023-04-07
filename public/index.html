@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html><head><title>Hello world</title><script src="/socket.io/socket.io.js"></script></head>
+   
+   <body>
+      <div id="userIdBox"></div>
+      <br><br>
+      <div id="outputBox"></div>
+      <br><br>
+      <input id="inputBox">
+      <button onclick="sendMessage()">Send</button>
+   
+   <script>
+      var socket = io();
+      const userId = `user${Math.round(Math.random() * 100)}`;
+      document.getElementById("userIdBox").innerHTML = userId;
+      
+      let outputBoxObj = document.getElementById("outputBox");
+      let inputBoxObj = document.getElementById("inputBox");
+
+      socket.on('chat_message', (msg) => {
+         outputBoxObj.innerHTML += (msg + "<br>");
+      });
+ 
+      function sendMessage () {
+         const inputMessage = inputBoxObj.value;
+         socket.emit('chat_message', 
+            {
+               userId,
+               msg: inputMessage
+            }
+         );
+         inputBoxObj.value = '';
+      }
+   </script>
+</body></html>
